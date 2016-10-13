@@ -58,8 +58,10 @@ public class TabMainActivity extends AppCompatActivity{
     viewPager.setAdapter(sectionsPagerAdapter);
 
     TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
-    tabLayout.setTabsFromPagerAdapter(sectionsPagerAdapter);
     tabLayout.setupWithViewPager(viewPager);
+    for (int i = 0; i < tabLayout.getTabCount(); i++) {
+      tabLayout.getTabAt(i).setIcon(mSectionsPagerAdapter.getImageResource(i));
+    }
   }
 
   public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -90,6 +92,16 @@ public class TabMainActivity extends AppCompatActivity{
                   return "Section 2";
           }
           return null;
+      }
+
+      public int getImageResource(int position) {
+          switch (position) {
+              case 0:
+                  return R.drawable.icon1;
+              case 1:
+                  return R.drawable.icon2;
+          }
+          return -1;
       }
   }
 }
