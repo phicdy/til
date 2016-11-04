@@ -1,0 +1,49 @@
+
+### shell
+
+Multi-lines require > and ;
+
+```yaml
+- name: execute shell
+  shell: >
+    git clone https//gitub.com/hoge/hoge.git;
+    cd hoge;
+    make;
+    make install;
+```
+
+### debug
+
+```yaml
+- name: unarchive zip
+  debug: msg="test {{ variable }}"
+```
+
+### stat
+
+```yaml
+- name: check file existence
+  stat:
+    path=/path/to/check/hoge
+  register:
+    hoge_stat
+- name: do something if file exist
+  shell: cat hoge
+  when: hoge_stat is defined
+```
+
+#### References
+
+* http://docs.ansible.com/ansible/stat_module.html
+* http://qiita.com/raki/items/297b245800f63b000797
+
+### unarchive
+
+unarhive **local file** to target host
+
+```yaml
+- name: unarchive zip
+  unarchive:
+    src=/your/local/archive/path/hoge.zip
+    dest=/your/target/host/path
+```
