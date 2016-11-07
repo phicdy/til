@@ -18,6 +18,11 @@ cd nginx-1.11.2/
 
 make -j2
 make install
+
+# create nginx group and user
+groupadd nginx
+useradd -g nginx nginx
+usermod -s /bin/false nginx
 ```
 
 ## nginx.conf setting
@@ -39,6 +44,8 @@ http {
 		}
 
 		location /proxy {
+			# deny access from users
+			internal;
 			proxy_pass http://other.server.com;
 		}
 	}
@@ -49,3 +56,4 @@ http {
 
 * https://heartbeats.jp/hbblog/2016/02/nginx-dynamic-modules.html
 * https://github.com/openresty/echo-nginx-module
+* [NGINX-1.5.12. コンパイル　インストール手順](http://face-web.websample.jp/2014/07/nginx-1-5-12/)

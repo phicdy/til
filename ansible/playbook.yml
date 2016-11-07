@@ -1,4 +1,11 @@
 
+### local deploy
+
+```yaml
+- hosts: all
+  connection: local
+```
+
 ### shell
 
 Multi-lines require > and ;
@@ -17,6 +24,29 @@ Multi-lines require > and ;
 ```yaml
 - name: unarchive zip
   debug: msg="test {{ variable }}"
+```
+
+### user
+
+http://docs.ansible.com/ansible/user_module.html
+
+```yaml
+- name: create user
+  user: name=hoge group=hoge shell=/bin/bash state=present
+```
+
+### group
+
+```yaml
+- name: create group
+  group: name=hoge state=present
+```
+
+### symlink
+
+```yaml
+- name: Create symlink
+  file: src=/path/to/symlink  dest=/new/path/to/symlink state=link
 ```
 
 ### stat

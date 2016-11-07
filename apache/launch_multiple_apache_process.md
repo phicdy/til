@@ -33,3 +33,8 @@ PrivateTmp=true
 [Install]
 WantedBy=multi-user.target
 ```
+
+### References
+
+* [CENTOS7でapacheを複数起動](http://blog.livedoor.jp/k_shin_pro/archives/44027682.html)
+* [\[apache\]Apache を同一サーバ上で複数プロセス起動するときに注意する点](http://d.hatena.ne.jp/amari3/20111219/1324305891)
