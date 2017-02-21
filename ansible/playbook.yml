@@ -42,6 +42,13 @@ http://docs.ansible.com/ansible/user_module.html
   group: name=hoge state=present
 ```
 
+### create file
+
+```yaml
+- name: Create file
+  file: path=/path/to/create/file state=touch mode=0644
+```
+
 ### symlink
 
 ```yaml
