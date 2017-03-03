@@ -18,6 +18,30 @@ https://developer.apple.com/library/content/samplecode/SimpleTunnel/Introduction
 * Since November 10th 2016, we dont need entitlement from apple to use network-extension
 * If we use NEHotspotHelper class, go to https://developer.apple.com/contact/network-extension/
 
+# NEPacketTunnelProvider
+
+* The NEPacketTunnelProvider class gives its subclasses access to a virtual network interface via the packetFlow property.
+* Subclass of NETunnelProvider
+
+https://developer.apple.com/reference/networkextension/nepackettunnelprovider
+
+## Settings
+
+1. Create a new App Extension target in the project
+2. Create a subclass of NEPacketTunnelProvider
+3. Set the NSExtensionPrincipalClass key in the the extension's Info.plist to the name of your subclass.
+4. Set the NSExtensionPointIdentifier key in the extension's Info.plist to com.apple.networkextension.packet-tunnel.
+
+```xml
+<key>NSExtension</key>
+<dict>
+    <key>NSExtensionPointIdentifier</key>
+    <string>com.apple.networkextension.packet-tunnel</string>
+    <key>NSExtensionPrincipalClass</key>
+    <string>MyCustomPacketTunnelProvider</string>
+</dict>
+```
+
 # NETunnelProviderManager
 
 Configure and control VPN connections provided by a Tunnel Provider app extension.
@@ -25,6 +49,58 @@ Configure and control VPN connections provided by a Tunnel Provider app extensio
 https://developer.apple.com/reference/networkextension/netunnelprovidermanager
 
 This class inherits NEVPNMager and can use custom VPN protocol.
+
+## Settings
+
+### Swift 3.0
+
+```swift
+let manager = NETunnelProviderManager()
+let protocol = NETunnelProviderProtocol()
+manager.protocolConfiguration = protocol
+manager.isEnabled = true
+manager.localizedDescription = "My VPN"
+
+// On Demand Rule https://developer.apple.com/reference/networkextension/neondemandrule
+let rule = NEOnDemandRuleConnect.init()
+//let rule = NEOnDemandRuleDisconnect.init()
+//let rule = NEOnDemandRuleEvaluateConnect.init()
+//let rule = NEOnDemandRuleIgnore.init()
+rule.interfaceTypeMatch = NEOnDemandRuleInterfaceType.any
+rule.dnsSearchDomainMatch = "domain"
+rule.dnsServerAddressMatch = "addres"
+rule.ssidMatch = "ssid"
+var url = URL.init(string: "http://www.google.com")
+rule.probeUrl = url
+manager.onDemandRules = [rule]
+manager.onDemandEnabled = true
+```
+
+### Objective-C
+
+```objective-c
+NETunnelProviderManager *manager = [[NETunnelProviderManager alloc] init];
+NETunnelProviderProtocol *protocol = [[NETunnelProviderProtocol alloc] init];
+manager.protocolConfiguration = protocol;
+manager.isEnabled = YES;
+manager.localizedDescription = @"My VPN";
+
+// On Demand Rule https://developer.apple.com/reference/networkextension/neondemandrule
+NEOnDemandRuleConnect *rule = [NEOnDemandRuleConnect new]
+//NEOnDemandRuleDisconnect *rule = [NEOnDemandRuleDisconnect new];
+//NEOnDemandRuleEvaluateConnect *rule = [NEOnDemandRuleEvaluateConnect new];
+//NEOnDemandRuleIgnore *rule = [NEOnDemandRuleIgnore new];
+rule.interfaceTypeMatch = NEOnDemandRuleInterfaceTypeAny;
+rule.dnsSearchDomainMatch = @"domain";
+rule.dnsServerAddressMatch = @"addres";
+rule.ssidMatch = @"ssid";
+NSURL *url = [[NSURL alloc] initWithString:@"http://www.google.com"];
+rule.probeUrl = url;
+NSMutableArray *ruleArray = [NSMutableArray array];
+[ruleArray addObject: rule];
+manager.onDemandRules = ruleArray;
+manager.onDemandEnabled = YES;
+```
 
 ## Save setting
 
@@ -44,30 +120,6 @@ manager.saveToPreferences { (error) -> Void in
 NETunnelProviderManager *manager = [[NETunnelProviderManager alloc] init];
 [manager saveToPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
 }];
-```
-
-# NEPacketTunnelProvider
-
-* The NEPacketTunnelProvider class gives its subclasses access to a virtual network interface via the packetFlow property.
-* Subclass of NETunnelProvider
-
-https://developer.apple.com/reference/networkextension/nepackettunnelprovider
-
-## Setting
-
-1. Create a new App Extension target in the project
-2. Create a subclass of NEPacketTunnelProvider
-3. Set the NSExtensionPrincipalClass key in the the extension's Info.plist to the name of your subclass.
-4. Set the NSExtensionPointIdentifier key in the extension's Info.plist to com.apple.networkextension.packet-tunnel.
-
-```xml
-<key>NSExtension</key>
-<dict>
-    <key>NSExtensionPointIdentifier</key>
-    <string>com.apple.networkextension.packet-tunnel</string>
-    <key>NSExtensionPrincipalClass</key>
-    <string>MyCustomPacketTunnelProvider</string>
-</dict>
 ```
 
 # NETunnelProviderProtocol
