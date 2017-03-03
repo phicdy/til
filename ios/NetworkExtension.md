@@ -30,15 +30,26 @@ This class inherits NEVPNMager and can use custom VPN protocol.
 
 https://developer.apple.com/reference/networkextension/nevpnmanager/1405985-savetopreferences
 
+### Swift 3.0
+
 ```swift
 let manager = NETunnelProviderManager()
 manager.saveToPreferences { (error) -> Void in
 }
 ```
 
+### Objective-C
+
+```objective-c
+NETunnelProviderManager *manager = [[NETunnelProviderManager alloc] init];
+[manager saveToPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
+}];
+```
+
 # NEPacketTunnelProvider
 
-The NEPacketTunnelProvider class gives its subclasses access to a virtual network interface via the packetFlow property.
+* The NEPacketTunnelProvider class gives its subclasses access to a virtual network interface via the packetFlow property.
+* Subclass of NETunnelProvider
 
 https://developer.apple.com/reference/networkextension/nepackettunnelprovider
 
@@ -57,4 +68,53 @@ https://developer.apple.com/reference/networkextension/nepackettunnelprovider
     <key>NSExtensionPrincipalClass</key>
     <string>MyCustomPacketTunnelProvider</string>
 </dict>
+```
+
+# NETunnelProviderProtocol
+
+* NETunnelProviderProtocol contains configuration parameters for a network tunnel.
+* Subclass of NEVPNProtocol
+
+https://developer.apple.com/reference/networkextension/netunnelproviderprotocol
+
+## Setting
+
+### Swift 3.0
+
+```swift
+// Identifier setting
+let protocol = NETunnelProviderProtocol()
+protocol.providerBundleIdentifier = "myidentifier"
+
+// Key-value settings for yourself
+// This setting can be obtained in NETunnelProvider.protocolConfiguration.providerConfiguration
+var configurations = [String: Any]()
+configurations["forMe"] = "someValue"
+protocol.providerConfiguration = configurations
+
+// NEVPNProtocol settings
+// https://developer.apple.com/reference/networkextension/nevpnprotocol?language=objc
+protocol.serverAddress = @"xxx.x.x.x";
+protocol.username = @"user";
+protocol.disconnectOnSleep = YES;
+```
+
+### Objective-C
+
+```objective-c
+// Identifier setting
+NETunnelProviderProtocol *protocol = [[NETunnelProviderProtocol alloc] init];
+protocol.providerBundleIdentifier = @"myidentifier";
+
+// Key-value settings for yourself
+// This setting can be obtained in NETunnelProvider.protocolConfiguration.providerConfiguration
+NSDictionary *configurations = [[NSDictionary alloc] init];
+[configurations setValue:@"someValue" forKey:@"forMe"];
+protocol.providerConfiguration = configurations;
+
+// NEVPNProtocol settings
+// https://developer.apple.com/reference/networkextension/nevpnprotocol?language=objc
+protocol.serverAddress = @"xxx.x.x.x";
+protocol.username = @"user";
+protocol.disconnectOnSleep = YES;
 ```
