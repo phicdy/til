@@ -13,8 +13,8 @@ def post_to_slack(channel_id, text, color):
     url = "https://slack.com/api/chat.postMessage"
     params = {
             'token': 'your_token',
-            'username': 'User Name'
-            'icon_emoji': 'icon'
+            'username': 'User Name',
+            'icon_emoji': 'icon',
             'channel': channel_id,
             'text': '',
             'attachments': json.dumps([
